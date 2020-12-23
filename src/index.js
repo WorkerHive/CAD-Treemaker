@@ -31,7 +31,7 @@ function buildTree(g, node, parent):
  */
 
 //Our starting Id
-export const rootId = 0;
+const rootId = 0;
 
 //the tree node object that we will be making the new tree structure
 // out of
@@ -42,11 +42,13 @@ class TreeNode {
         this.children = children
       }
     
-    id() {return this.id; }
+    get id() {return this.id; }
+    get parent() {return this.parent}
+    get children(){return this.children}
 
-    parent() {return this.parent}
-
-    children(){return this.children}
+    set addBranch(branch){
+        this.children = this.children.push(branch);
+    }
 }
 
 //Our Parent Node
@@ -56,15 +58,18 @@ export function rootTree(g, rootId){
 }
 
 //grow a tree from the input .glb file from it's contents
-function GrowTree(TreeRoot){
-    //Add the first branch node to the tree
-    let growingTree = TreeRoot
-
-    branches.forEach(twig => {
-        // order the twigs
-        twig
+export function GrowTree(g, node, tree){
+    g[node.id].forEach(twig => {
+        if (tree !== null && twig.id == tree.id)
+        {
+            //continue
+        } else {
+            branch = TreeNode(twig.id, node, [])
+            node.addBranch(branch)
+            GrowTree(g, twig, node)
+        }
     });
-
+    return node
 }
 
 

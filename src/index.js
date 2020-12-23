@@ -30,34 +30,35 @@ function buildTree(g, node, parent):
  * This process uses Depth-first search [DFS] to order the tree object output from the .glb input.
  */
 
-//Our Parent Node
-const TreeRoot;
-const Seed = AmorphusTreeEntity
+//Our starting Id
+export const rootId = 0;
 
+//the tree node object that we will be making the new tree structure
+// out of
 class TreeNode {
     constructor(id, parent, children) {
         this.id = id,
         this.parent = parent,
         this.children = children
       }
+    
+    id() {return this.id; }
 
-    id() {
-        return this.id; 
-    }
+    parent() {return this.parent}
 
-    parent() {
-        return this.parent
-    }
-
-    children(){
-        return this.children
-    }
+    children(){return this.children}
 }
 
-function GrowTree(tree){
-    //process tree
-    let processedtree = tree
-    let branches = processedtree
+//Our Parent Node
+export function rootTree(g, rootId){
+    let root = Treenode(rootId, null, [])
+    return GrowTree(g, root, null)
+}
+
+//grow a tree from the input .glb file from it's contents
+function GrowTree(TreeRoot){
+    //Add the first branch node to the tree
+    let growingTree = TreeRoot
 
     branches.forEach(twig => {
         // order the twigs
@@ -66,8 +67,4 @@ function GrowTree(tree){
 
 }
 
-var rootId = 1
-function rootTree(g, rootId){
-    let root = Treenode(rootId, null, [])
-    return GrowTree(g, root, null)
-}
+

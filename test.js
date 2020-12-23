@@ -1,7 +1,9 @@
-import { GLTFLoader } from "@babylonjs/loaders/glTF/2.0/glTFLoader"
+//import { GLTFLoader } from "@babylonjs/loaders/glTF/2.0/glTFLoader"
+import * as BABYLON from "babylonjs";
 
-export const test = BABYLON.SceneLoader.ImportMeshAsync("test", "./test/", "testObj.glb");
+//export const test = BABYLON.SceneLoader.ImportMeshAsync("test", "./test/", "testObj.glb");
 
+/*
 //check the data
 try {
     if(test !== null && test !== false){
@@ -45,4 +47,6 @@ engine.runRenderLoop(function(){
 // the canvas/window resize event handler
 window.addEventListener('resize', function(){
     engine.resize();
-});
+});*/
+
+BABYLON.Sandbox.Show({hostElement: document.getElementById("renderCanvas")});

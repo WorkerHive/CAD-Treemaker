@@ -46,30 +46,40 @@ class TreeNode {
     get parent() {return this.parent}
     get children(){return this.children}
 
+    /**
+     * @param {TreeNode} branch
+     */
     set addBranch(branch){
         this.children = this.children.push(branch);
     }
 }
 
+//ensure the .glb file is ready to make a tree
+export function processGLB(glbObj){
+
+}
+
 //Our Parent Node
+// Use a process function to ensure 'g' is a flattened array of the .glb content
 export function rootTree(g, rootId){
     let root = Treenode(rootId, null, [])
     return GrowTree(g, root, null)
 }
 
-//grow a tree from the input .glb file from it's contents
+//grow a tree graph from the input .glb file from it's contents
+//g is the graph
 export function GrowTree(g, node, tree){
     g[node.id].forEach(twig => {
         if (tree !== null && twig.id == tree.id)
         {
-            //continue
+            continue;
         } else {
             branch = TreeNode(twig.id, node, [])
             node.addBranch(branch)
             GrowTree(g, twig, node)
         }
     });
-    return node
+    return node;
 }
 
 

@@ -2,10 +2,10 @@
   "name": "cad-treemaker",
   "version": "1.0.0",
   "description": "Input a CAD.glb file, treemaker will output a graph of associated parts within that model.",
-  "main": "test.js",
+  "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "test": "test.js"
+    "test": "node src/test/test.js"
   },
   "repository": {
     "type": "git",
@@ -18,7 +18,13 @@
   },
   "homepage": "https://github.com/WorkerHive/CAD-Treemaker#readme",
   "dependencies": {
-    "babylonjs": "^4.2.0",
-    "server": "^1.0.31"
+    "babylonjs": "^4.2.0"
+  },
+  "devDependencies": {
+    "@babylonjs/core": "^4.2.0",
+    "@babylonjs/loaders": "^4.2.0",
+    "webpack": "^5.11.0",
+    "webpack-cli": "^4.2.0",
+    "webpack-dev-server": "^3.11.0"
   }
 }

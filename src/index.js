@@ -1,6 +1,5 @@
 
 /*
-
 PSEUDO CODE
 
 class Treenode:
@@ -20,21 +19,19 @@ function buildTree(g, node, parent):
         node.children.add(child)
         buildTree(g, child, node)
     return node
-    
 */
 
 /*
  * The parent node is the node which we choose to order all other nodes by.
  * See: https://towardsdatascience.com/graph-theory-rooting-a-tree-fb2287b09779 [accessed: 23/12/2020]
  * 
- * This process uses Depth-first search [DFS] to order the tree object output from the .glb input.
+ * This process uses Depth-first search [DFS, mentioned in article above] to order the tree object output from the .glb input.
  */
 
 //Our starting Id
 const rootId = 0;
 
-//the tree node object that we will be making the new tree structure
-// out of
+//the tree node object that we will be making the new tree graph with
 class TreeNode {
     constructor(id, parent, children) {
         this.id = id,
@@ -54,21 +51,16 @@ class TreeNode {
     }
 }
 
-//ensure the .glb file is ready to make a tree
-export function processGLB(glbObj){
-
-}
-
 //Our Parent Node
 // Use a process function to ensure 'g' is a flattened array of the .glb content
-export function rootTree(g, rootId){
+function rootTree(g, rootId){
     let root = Treenode(rootId, null, [])
-    return GrowTree(g, root, null)
+    return growTree(g, root, null)
 }
 
 //grow a tree graph from the input .glb file from it's contents
 //g is the graph
-export function GrowTree(g, node, tree){
+function growTree(g, node, tree){
     g[node.id].forEach(twig => {
         if (tree !== null && twig.id == tree.id)
         {
@@ -76,10 +68,20 @@ export function GrowTree(g, node, tree){
         } else {
             branch = TreeNode(twig.id, node, [])
             node.addBranch(branch)
-            GrowTree(g, twig, node)
+            growTree(g, twig, node)
         }
     });
     return node;
 }
 
+//usage:
+// set the root id, defualt is 0,
+// make the root node of the tree using rootTree
+// pass the root node into growTree
 
+export {
+    rootId,
+    TreeNode,
+    rootTree,
+    growTree
+}

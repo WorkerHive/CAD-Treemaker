@@ -29,7 +29,7 @@ function buildTree(g, node, parent):
  */
 
 //Our starting Id
-const rootId = 0;
+var rootId = 0;
 
 //the tree node object that we will be making the new tree graph with
 class TreeNode {
@@ -38,17 +38,17 @@ class TreeNode {
         this.parent = parent,
         this.children = [children]
       }
-    /*
+    
     //Setters
     set id(id) { this.id = id};
-    set parent(p) {this.parent = p};
-    set children(c) {this.children = c};
-
+    //set parent(p) {this.parent = p};
+    //set children(c) {this.children = c};
+    
     //Getters
     get id() {return this.id };
-    get parent() {return this.parent};
-    get children(){return this.children};
-    */
+    //get parent() {return this.parent};
+    //get children(){return this.children};
+    
 
     /**
      * @param {TreeNode} branch
@@ -62,17 +62,17 @@ class TreeNode {
 //Our Parent Node
 // Use a process function to ensure 'g' is a flattened array of the .glb content
 function rootTree(g, rootId){
-    let root = Treenode(rootId, null, [])
+    var root = new TreeNode(rootId, null, []);
     return growTree(g, root, null)
 }
 
 //grow a tree graph from the input .glb file from it's contents
 //g is the graph
 function growTree(g, node, tree){
-    g[node.id].forEach(twig => {
+    g[node.id()].forEach(twig => {
         if (tree !== null && twig.id == tree.id)
         {
-            continue;
+            return; //skip this iteration
         } else {
             branch = TreeNode(twig.id, node, [])
             node.addBranch(branch)
@@ -82,9 +82,21 @@ function growTree(g, node, tree){
     return node;
 }
 
+// Instance tests
+//var myNode = new TreeNode(rootId)
+//console.log("Root ID:" + rootId);
+//console.log("Treenode obj test" + TreeNode);
+//console.log("Treenode instance test:" + myNode);
 
+//usage:
+// 1. set the root id, defualt is 0,
+// 2. make the root node of the tree using rootTree
+// 3. pass the root node into growTree
+
+
+//Example:
 // test data taken from: https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/README.md#nodes-and-hierarchy [26/12/2020]
-var testData = {
+const testData = {
     "nodes": [
         {
             "name": "Car",
@@ -104,16 +116,14 @@ var testData = {
         }        
     ]
 }
-var myNode = new TreeNode(rootId)
 
-console.log("Root ID:" + rootId);
-//console.log("Treenode obj test" + TreeNode);
-console.log("Treenode instance test:" + myNode);
+// 1. already appropriate
+// 2. define tree root, note how the root node of the data is the first in the array
+var myNode = rootTree(testData, rootId)
+console.log(myNode)
 
-//usage:
-// set the root id, defualt is 0,
-// make the root node of the tree using rootTree
-// pass the root node into growTree
+
+
 
 /*
 export {

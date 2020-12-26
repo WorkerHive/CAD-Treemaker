@@ -82,6 +82,28 @@ function growTree(g, node, tree){
     return node;
 }
 
+
+// test data taken from: https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/README.md#nodes-and-hierarchy [26/12/2020]
+var testData = {
+    "nodes": [
+        {
+            "name": "Car",
+            "children": [1, 2, 3, 4]
+        },
+        {
+            "name": "wheel_1"
+        },
+        {
+            "name": "wheel_2"
+        },
+        {
+            "name": "wheel_3"
+        },
+        {
+            "name": "wheel_4"
+        }        
+    ]
+}
 var myNode = new TreeNode(rootId)
 
 console.log("Root ID:" + rootId);

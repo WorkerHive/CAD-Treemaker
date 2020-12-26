@@ -36,15 +36,23 @@ class TreeNode {
     constructor(id, parent, children) {
         this.id = id,
         this.parent = parent,
-        this.children = children
+        this.children = [children]
       }
-    
-    get id() {return this.id; }
-    get parent() {return this.parent}
-    get children(){return this.children}
+    /*
+    //Setters
+    set id(id) { this.id = id};
+    set parent(p) {this.parent = p};
+    set children(c) {this.children = c};
+
+    //Getters
+    get id() {return this.id };
+    get parent() {return this.parent};
+    get children(){return this.children};
+    */
 
     /**
      * @param {TreeNode} branch
+     * Add a node to the list of children nodes
      */
     set addBranch(branch){
         this.children = this.children.push(branch);
@@ -74,14 +82,21 @@ function growTree(g, node, tree){
     return node;
 }
 
+var myNode = new TreeNode(rootId)
+
+console.log("Root ID:" + rootId);
+//console.log("Treenode obj test" + TreeNode);
+console.log("Treenode instance test:" + myNode);
+
 //usage:
 // set the root id, defualt is 0,
 // make the root node of the tree using rootTree
 // pass the root node into growTree
 
+/*
 export {
     rootId,
     TreeNode,
     rootTree,
     growTree
-}
+} */

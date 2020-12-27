@@ -18,5 +18,7 @@
   },
   "homepage": "https://github.com/WorkerHive/CAD-Treemaker#readme",
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "@babel/core": "^7.12.10"
+  }
 }

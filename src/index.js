@@ -34,42 +34,43 @@ var rootId = 0;
 //the tree node object that we will be making the new tree graph with
 class TreeNode {
     constructor(id, parent, children) {
-        this.id = id,
-        this.parent = parent,
-        this.children = [children]
+        this._id = id,
+        this._parent = parent,
+        this._children = [children]
       }
     
     //Setters
-    set id(id) { this.id = id};
+    set id(val) { return this._id = val};
     //set parent(p) {this.parent = p};
     //set children(c) {this.children = c};
     
     //Getters
-    get id() {return this.id };
+    get id() {return this._id };
     //get parent() {return this.parent};
     //get children(){return this.children};
-    
 
     /**
      * @param {TreeNode} branch
      * Add a node to the list of children nodes
      */
     set addBranch(branch){
-        this.children = this.children.push(branch);
+        this._children = this._children.push(branch);
     }
 }
 
 //Our Parent Node
 // Use a process function to ensure 'g' is a flattened array of the .glb content
 function rootTree(g, rootId){
-    var root = new TreeNode(rootId, null, []);
+    var root = new TreeNode(rootId, null, null);
     return growTree(g, root, null)
 }
 
 //grow a tree graph from the input .glb file from it's contents
 //g is the graph
 function growTree(g, node, tree){
-    g[node.id()].forEach(twig => {
+    console.log(g);
+    console.log(node);
+    g[node.id].forEach(twig => {
         if (tree !== null && twig.id == tree.id)
         {
             return; //skip this iteration
@@ -120,7 +121,8 @@ const testData = {
 // 1. already appropriate
 // 2. define tree root, note how the root node of the data is the first in the array
 var myNode = rootTree(testData, rootId)
-console.log(myNode)
+console.log(testData);
+console.log(myNode);
 
 
 

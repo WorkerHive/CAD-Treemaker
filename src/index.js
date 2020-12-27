@@ -50,11 +50,11 @@ class TreeNode {
     //get children(){return this.children};
 
     /**
-     * @param {TreeNode} branch
+     * @param {TreeNode}
      * Add a node to the list of children nodes
      */
-    set addBranch(branch){
-        this._children = this._children.push(branch);
+    set children(newChild){
+        this._children = this._children.push(newChild);
     }
 }
 
@@ -68,17 +68,17 @@ function rootTree(g, rootId){
 //grow a tree graph from the input .glb file from it's contents
 //g is the graph
 function growTree(g, node, tree){
-    console.log(g);
-    console.log(node);
-    console.log(node.id);
+    //console.log(g);
+    //console.log(node);
+    //console.log(node.id);
     console.log(g[node.id]);
-    g[node.id].forEach(twig => {
+    g.forEach(twig => {
         if (tree !== null && twig.id == tree.id)
         {
             return; //skip this iteration
         } else {
-            branch = TreeNode(twig.id, node, [])
-            node.addBranch(branch)
+            let branch = new TreeNode(twig.id, node, [])
+            node.children += branch;
             growTree(g, twig, node)
         }
     });
@@ -121,7 +121,7 @@ const testData = {
 }
 
 //how the data should look like when cleaned down to a 1D array of objects
-const cleanData = [
+var cleanData = [
     {
         "name": "Car",
         "children": [1, 2, 3, 4]
@@ -139,6 +139,15 @@ const cleanData = [
         "name": "wheel_4"
     }        
 ]
+
+//give objects ids
+var i = 0;
+cleanData.forEach(e => {
+    if (e.id == null){
+        e.id = i;
+        i++;
+    }
+});
 
 // 1. already appropriate
 // 2. define tree root, note how the root node of the data is the first in the array

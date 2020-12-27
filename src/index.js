@@ -66,18 +66,18 @@ function rootTree(g, rootId){
 }
 
 //grow a tree graph from the input .glb file from it's contents
-//g is the graph
+//g is the graph input, tree is the tree output
 function growTree(g, node, tree){
-    //console.log(g);
-    //console.log(node);
-    //console.log(node.id);
-    console.log(g[node.id]);
-    g.forEach(twig => {
+    let i = node.id
+    console.log(g[i])
+    g[i].forEach(twig => {
+        console.log("twig:")
+        console.log(twig)
         if (tree !== null && twig.id == tree.id)
         {
             return; //skip this iteration
         } else {
-            let branch = new TreeNode(twig.id, node, [])
+            let branch = new TreeNode(twig.id, node, null)
             node.children += branch;
             growTree(g, twig, node)
         }

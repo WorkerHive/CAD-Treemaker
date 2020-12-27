@@ -70,6 +70,8 @@ function rootTree(g, rootId){
 function growTree(g, node, tree){
     console.log(g);
     console.log(node);
+    console.log(node.id);
+    console.log(g[node.id]);
     g[node.id].forEach(twig => {
         if (tree !== null && twig.id == tree.id)
         {
@@ -118,11 +120,29 @@ const testData = {
     ]
 }
 
+//how the data should look like when cleaned down to a 1D array of objects
+const cleanData = [
+    {
+        "name": "Car",
+        "children": [1, 2, 3, 4]
+    },
+    {
+        "name": "wheel_1"
+    },
+    {
+        "name": "wheel_2"
+    },
+    {
+        "name": "wheel_3"
+    },
+    {
+        "name": "wheel_4"
+    }        
+]
+
 // 1. already appropriate
 // 2. define tree root, note how the root node of the data is the first in the array
-var myNode = rootTree(testData, rootId)
-console.log(testData);
-console.log(myNode);
+var myNode = rootTree(cleanData, rootId)
 
 
 

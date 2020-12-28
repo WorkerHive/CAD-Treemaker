@@ -59,8 +59,10 @@ class TreeNode {
 }
 
 //Our Parent Node
-// Use a process function to ensure 'g' is a flattened array of the .glb content
-function rootTree(g, rootId){
+// Use a process function to ensure 'g' is an array of the .glb content
+function rootTree(g, rootId, rootChildren){
+    //Option to add children to 
+
     var root = new TreeNode(rootId, null, null);
     return growTree(g, root, null)
 }
@@ -69,8 +71,8 @@ function rootTree(g, rootId){
 //g is the graph input, tree is the tree output
 function growTree(g, node, tree){
     let i = node.id
-    console.log(g[i])
-    g[i].forEach(twig => {
+    console.log(g.nodes[i])
+    g.nodes[i].forEach(twig => {
         console.log("twig:")
         console.log(twig)
         if (tree !== null && twig.id == tree.id)
@@ -121,6 +123,7 @@ const testData = {
 }
 
 //how the data should look like when cleaned down to a 1D array of objects
+/*
 var cleanData = [
     {
         "name": "Car",
@@ -139,22 +142,38 @@ var cleanData = [
         "name": "wheel_4"
     }        
 ]
+*/
 
-//give objects ids
+//give objects ids if there are none
 var i = 0;
-cleanData.forEach(e => {
-    if (e.id == null){
-        e.id = i;
-        i++;
-    }
-});
+if (testData.nodes[0].id === undefined) {
+    testData.nodes.forEach(e => {
+        if (e.id == null){
+            e.id = i;
+            i++;
+        }
+    });
+}
+//check that ids are applied
+console.log("first node id: " + testData.nodes[0].id)
+console.log(testData)
+
+//give objects a parent property if there are none
+var i = 0;
+if (testData.nodes[0].parent === undefined) {
+    testData.nodes.forEach(e => {
+        if (e.parent == null){
+            e.parent = null;
+        }
+    });
+}
+
+console.log(testData)
+
 
 // 1. already appropriate
 // 2. define tree root, note how the root node of the data is the first in the array
-var myNode = rootTree(cleanData, rootId)
-
-
-
+//var myNode = rootTree(testData, rootId)
 
 /*
 export {

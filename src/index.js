@@ -61,10 +61,14 @@ class TreeNode {
 //Our Parent Node
 // Use a process function to ensure 'g' is an array of the .glb content
 function rootTree(g, rootId, rootChildren){
-    //Option to add children to 
+    //Option to add children to root
+    if (rootChildren == undefined){
+        rootChildren = null;
+    }
 
-    var root = new TreeNode(rootId, null, null);
-    return growTree(g, root, null)
+    var rootNode = g[rootId];
+    console.log("rootNode:", rootNode)
+    return growTree(g, rootNode, rootChildren)
 }
 
 //grow a tree graph from the input .glb file from it's contents
@@ -122,28 +126,6 @@ const testData = {
     ]
 }
 
-//how the data should look like when cleaned down to a 1D array of objects
-/*
-var cleanData = [
-    {
-        "name": "Car",
-        "children": [1, 2, 3, 4]
-    },
-    {
-        "name": "wheel_1"
-    },
-    {
-        "name": "wheel_2"
-    },
-    {
-        "name": "wheel_3"
-    },
-    {
-        "name": "wheel_4"
-    }        
-]
-*/
-
 //give objects ids if there are none
 var i = 0;
 if (testData.nodes[0].id === undefined) {
@@ -167,13 +149,14 @@ if (testData.nodes[0].parent === undefined) {
         }
     });
 }
-
+//check that parent property is applied
+console.log("first node parent: " + testData.nodes[0].parent)
 console.log(testData)
 
 
-// 1. already appropriate
+// 1. rootID already appropriate as the parent obj is in the index of [0]
 // 2. define tree root, note how the root node of the data is the first in the array
-//var myNode = rootTree(testData, rootId)
+var myNode = rootTree(testData, rootId);
 
 /*
 export {

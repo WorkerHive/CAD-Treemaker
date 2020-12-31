@@ -61,31 +61,46 @@ class TreeNode {
 //Our Parent Node
 // Use a process function to ensure 'g' is an array of the .glb content
 function rootTree(g, rootId, rootChildren){
-    //Option to add children to root
+
+    //Check for root children, else null
     if (rootChildren == undefined){
+        console.log("No root children found, assigning null for root node.")
         rootChildren = null;
+    } else {
+        console.log("Root children found, assigning graph.nodes[rootId] for root node.")
+        if (rootId == undefined || rootId == null){
+            console.log("No root id found (undef / null), assigning 0.")
+            rootId = 0;
+        }
+        try {
+            rootChildren = g.nodes[rootId].children
+            console.log("g.nodes[rootId].children successfully added as children for root node.")
+        } catch (error) {
+            console.log("assigning g.nodes[rootId].children to root node as children failed")
+        }
     }
 
-    var rootNode = g[rootId];
-    console.log("rootNode:", rootNode)
+    //var rootNode = g.nodes[rootId];
+    var rootNode = new TreeNode(rootId, null, rootChildren)
+    //console.log("rootNode:", rootNode)
     return growTree(g, rootNode, rootChildren)
 }
 
 //grow a tree graph from the input .glb file from it's contents
 //g is the graph input, tree is the tree output
-function growTree(g, node, tree){
+function growTree(g, node, parent){
     let i = node.id
-    console.log(g.nodes[i])
-    g.nodes[i].forEach(twig => {
-        console.log("twig:")
-        console.log(twig)
-        if (tree !== null && twig.id == tree.id)
+    console.log("Node:", node)
+    console.log("Graph slice of selected node", g.nodes[i])
+    g.nodes[i].children.forEach(e => {
+        console.log("element:", e)
+        if (parent !== null && e.id == parent.id)
         {
             return; //skip this iteration
         } else {
-            let branch = new TreeNode(twig.id, node, null)
-            node.children += branch;
-            growTree(g, twig, node)
+            let child = new TreeNode(e.id, node, null)
+            node.children += child.id;
+            growTree(g, child, node)
         }
     });
     return node;
@@ -137,8 +152,8 @@ if (testData.nodes[0].id === undefined) {
     });
 }
 //check that ids are applied
-console.log("first node id: " + testData.nodes[0].id)
-console.log(testData)
+//console.log("first node id: " + testData.nodes[0].id)
+//console.log(testData)
 
 //give objects a parent property if there are none
 var i = 0;
@@ -150,8 +165,11 @@ if (testData.nodes[0].parent === undefined) {
     });
 }
 //check that parent property is applied
-console.log("first node parent: " + testData.nodes[0].parent)
-console.log(testData)
+//console.log("first node parent: " + testData.nodes[0].parent)
+//console.log(testData)
+//check getter for node id
+//var mynode2 = new TreeNode(1, null,null)
+//console.log("mynode2 id:", mynode2.id)
 
 
 // 1. rootID already appropriate as the parent obj is in the index of [0]

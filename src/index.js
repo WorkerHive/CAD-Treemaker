@@ -24,9 +24,10 @@ function findlcp(prefixes, node, cmpStr){
         console.log("node:", node)
         //current longest common prefix
         let lcp = ""
-        let slice = 
+        let slice = [...node]
         //get longest prefix
-        [...node].forEach(char =>{
+        console.log("slice:", slice)
+        slice.forEach(char =>{
             if (char.length() > lcp){
                 lcp = char;
             }

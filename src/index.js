@@ -11,36 +11,49 @@ var cmpStr = ""
 var readSlices = []
 var rootId = 0
 
-function rootNode(prefixes, rootId){
-    let rootSlice = prefixes[rootId]
+function rootNode(array, rootId){
+    let rootSlice = array[rootId]
     console.log("root slice:", rootSlice)
-    return findlcp(prefixes, rootSlice, cmpStr)
+    return findlcp(array, rootSlice, cmpStr)
 }
 
 //find longest common prefix and make a tree like structure from them.
-function findlcp(prefixes, node, cmpStr){
-    //init string if blank
-    if (cmpStr == ""){
-        console.log("node:", node)
-        //current longest common prefix
-        let lcp = ""
-        let slice = [...node]
-        //get longest prefix
-        console.log("slice:", slice)
-        slice.forEach(char =>{
-            if (char.length() > lcp){
-                lcp = char;
-            }
-        })
-        console.log("longest common prefix: ", lcp)
-        
-    } else {
-        //loop through list of words to find longest prefix
-        prefixes.forEach(prefix => {
-            //set string
-        });
+function findlcp(array, node, cmpStr){
+
+    if (cmpStr == "" || cmpStr == null) {
+        //set to node val
+        var lcp = node
+
+        //add cmpStr to "read list"
+        readSlices.push({"val":cmpStr, "instances":0})
     }
+    
+    //get longest prefix
+    console.log("slice:", node)
+    
+
+    //check through data for a prefix match, add if true
+    array.forEach(nodeSlice => {
+    let len = nodeSlice.length
+    console.log("lcp candidate:", cmpStr)
+        //set string if match
+        console.log("test: ",nodeSlice ," == ", node.slice(0, len), "?")
+        if(nodeSlice == node.slice(0, len)) {
+            lcp = nodeSlice //new potential lcp
+                //add lcp to 
+            console.log("result: yes")
+            console.log("success! Next word. \n")
+        } else {
+            //lcp didnt match
+            console.log("result: no")
+            console.log("reducing tested string by last char")
+            lcp = nodeSlice.substring(0, len - 1);
+            console.log("new slice:", lcp)
+            findlcp(array, nodeSlice, lcp)
+        }
+    });
+    console.log("longest common prefix: ", lcp)
 }
 
 //Run example
-var myGraph = rootNode(testArray, rootId);
+var myGraph = rootNode(testArray, rootId, null);

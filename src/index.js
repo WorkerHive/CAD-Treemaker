@@ -16,7 +16,7 @@ var lngMtchLst = []; //the most matched prefixes get put here for sorting
 //compare contents of an array to build a tree of prefixes
 function growLCPTree(array, index, cmpStr){
     //if the compare string is blank, make one from the first index of list
-    if (cmpStr == "" || cmpStr == null || cmpStr ) {
+    if (cmpStr == "" || cmpStr == null || cmpStr == undefined ) {
         var cmpStr = array[index].slice(0, 2) //get first 2 chars of index of the array
         console.log("Blank cmpStr set:", cmpStr, "\n")
     }
@@ -49,8 +49,9 @@ function growLCPTree(array, index, cmpStr){
             )
 
             console.log(mtchLst[0].prefixes)
-
             console.log("Finding LCP of: ", eleCmp)
+            
+            //
 
             arr2.forEach(e2 => {
                 console.log("Nested test: [cmpStr] ",cmpStr ," == [slice]", e2.slice(0, len), "?");
@@ -74,8 +75,6 @@ function growLCPTree(array, index, cmpStr){
                 console.log("Adding element as unique: ", unq)
             }
         }
-        
-        //if there are still elements in the list
         
     })
 }

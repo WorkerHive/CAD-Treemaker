@@ -191,8 +191,11 @@ function squashTrie(trieNode, childIndex) {
       console.log("node.key after: ", node.key)
 
       //reference fix for g child and parent
+      // how to assign parent to child: node.children[word[i]].parent = node;
       gChild.parent = node;
-      node.parent[Object.keys(node.parent)[i]] = node;
+      trieNode.children = node;
+
+      node.parent[Object.keys(node.parent)[0]] = node;
 
       //node children clone
       //console.log("node.children before: ", node.children)
@@ -206,10 +209,17 @@ function squashTrie(trieNode, childIndex) {
 
       //loop
       console.log(node)
-      squashTrie(trieNode);
+      squashTrie(node);
     } else {
       if (len > 1){
         //next child if more than one child
+        
+        
+
+        node.key += gChild.key;
+        gChild.parent = node;
+        node.parent[Object.keys(node.parent)[i]] = node;
+        node.children = gChild.children;
         return;
       } else {
         //no next to go to, break from recursion

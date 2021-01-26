@@ -116,119 +116,88 @@ function doesPropExist(node, property) {
   }
 }
 
-//for a given trie make an object map of vals which squash the vals of all consecutive nodes into
-// longest common prefixes [LCP]. If a word is unique, it will appear in full as it is it's own LCP
-/*function squashTrie(trie) {
-
-  if (doesPropExist(trie, "root")) {
-    //input node is root
-    var children = trie.root.children;
-    //console.log("Input was trie. Children: ", children)
+//squash all chars into char groups based on number of children 
+function squashTrie(trieTree) {
+  if (doesPropExist(trieTree, "root")) {
+    var children = trieTree.root.children;
   } else {
-    var children = trie.children;
-    //console.log("Input was node. Children: ", children)
+    //Not root but has children prop
+    var children = trieTree.children;
   }
 
-  //for every child in the given node
-  for (var child in children) {
-
-    //get child node rather than key ref
-    let node = children[child]
-
-    console.log("this is the node: ", node);
-    console.log("this is the child: ", child)
-
-    //if the child has children
-    if (doesPropExist(node, "children")) {
-      console.log("child of node: ", node.children)
-
-      //and there is only one child
-      if (Object.keys(node.children).length == 1) {
-        //squash val into curr node val
-        let val = node.children.key;
-        node.key += val
-        console.log("val added: ", val)
-        console.log("new key for curr node: ", node.key)
-
-        //copy children of node child
-      }
-    }
-  }
-}*/
-
-function squashTrie(trieNode, childIndex) {
-  if (doesPropExist(trieNode, "root")) {
-    //input node is root, get first child with 1 char in val
-    var children = trieNode.root.children;
-  } else {
-    var children = trieNode.children;
-    //console.log("Input was node. Children: ", children)
-  }
-
-  //console.log(children)
-  //console.log((Object.keys(children["W"]).length == 1))
-  //console.log(Object.keys(children["W"].children).length)
-  let i;
-  if (i == undefined || i == null){
-    i = 0;
-  }
-  console.log(i)
-  for (var child in children) {
-    
-    var node = children[child];
+  for (var x in children) {
+    var node = children[x];
     let len = Object.keys(node.children).length;
-    let gChild = node.children[Object.keys(node.children)[i]]
-    
+    //console.log(node)
+
     //if a word ends on that letter skip
-    if(node.end){
+    console.log("\nNode end?: ", node.end)
+    if (node.end) {
       return;
     }
 
-    if (len == 1){
-      //node key update
-      console.log("node.key before: ", node.key)
-      node.key += gChild.key;
-      console.log("node.key after: ", node.key)
+    //if theres only 1 child in tree, squish
+    if (len == 1) {
+      let gChild = node.children[Object.keys(node.children)[0]]
+      node.key += gChild.key; //node key update
+      console.log("Node key after update: ", node.key)
+      gChild.parent = node; //reference fix for g child and parent
+      node.children = gChild.children;//node children clone
+      gChild = null; //remove child from trie, has been squished into parent
+      squashTrie(trieTree); //loop
+    }
 
-      //reference fix for g child and parent
-      // how to assign parent to child: node.children[word[i]].parent = node;
-      gChild.parent = node;
-      trieNode.children = node;
+    //if there are more than 1 child, check to see if they have chains, for each chain squish
+    // for each end
+    if (len > 1) {
+      console.log("len was greater than 1! New node ")
+      
+      //recursion on node after key pop
+      squashTrie(node)
+    }
+  }
+}
 
-      node.parent[Object.keys(node.parent)[0]] = node;
+function readAndAdd(squishedTrie, obj, refList){
+  if (doesPropExist(squishedTrie, "root")) {
+    var children = squishedTrie.root.children;
+  } else {
+    var children = squishedTrie.children;
+  }
 
-      //node children clone
-      //console.log("node.children before: ", node.children)
-      node.children = gChild.children;
-      //console.log("node.children after: ", node.children)
 
-      //remove child from trie
-      //console.log("gChild before: ", gChild)
-      gChild = null;
-      //console.log("gChild after: ", gChild)
+  //for each node in the children list
+  for (var x in children){
+    var node = children[x];
+    let len = Object.keys(node.children).length;
 
-      //loop
-      console.log(node)
-      squashTrie(node);
-    } else {
-      if (len > 1){
-        //next child if more than one child
-        
-        
+    for (var ref in refList){
+      
+    }
 
-        node.key += gChild.key;
-        gChild.parent = node;
-        node.parent[Object.keys(node.parent)[i]] = node;
-        node.children = gChild.children;
-        return;
-      } else {
-        //no next to go to, break from recursion
-        return;
-      }
+
+    //add key as blank key for obj
+    obj[node.key.toString()] = {};
+
+    //add children and go through tree
+    //for (var y in children[x].children) {
+    //  console.log("this is y: ", children[x].children[y])
+    //  readAndAdd(children[x])
+    //}
+
+    //no children, continue
+    if (len == 0) {
+      return;
+    }
+
+    //has children, loop
+    if (len >= 1) {
+      //get ref for key insertion
+      node.key
+      readAndAdd(node)
     }
   }
 
-  console.log("trieNode after recursion: ", node)
 }
 
 // instantiate our trie
@@ -252,4 +221,12 @@ testArray.forEach(e => {
 //console.log(trie.find("Wheel_"));  // [ 'Wheel_4', 'Wheel_3', 'Wheel_2' ]
 //console.log(trie.find("Stee")); // [ 'Steering Wheel' ]
 
+var myObj = {};
 squashTrie(trie)
+
+//console.log("trieNode after recursion: ", trie.root.children["W"])
+//console.log(trie.root.children["S"])
+
+readAndAdd(trie, myObj)
+
+console.log("My obj after inserting vals from grouped trie", myObj)

@@ -1,4 +1,4 @@
-// trie node and setup from https://gist.github.com/tpae/72e1c54471e88b689f85ad2b3940a8f0 [accessed 18/01/2020]
+// trie node and setup from https://gist.github.com/tpae/72e1c54471e88b689f85ad2b3940a8f0 [accessed 18/01/2021]
 
 function TrieNode(key) {
   this.key = key; //node value e.g. 'a'
@@ -131,7 +131,7 @@ function squashTrie(trieTree) {
     //console.log(node)
 
     //if a word ends on that letter skip
-    console.log("\nNode end?: ", node.end)
+    //console.log("\nNode end?: ", node.end)
     if (node.end) {
       return;
     }
@@ -140,7 +140,7 @@ function squashTrie(trieTree) {
     if (len == 1) {
       let gChild = node.children[Object.keys(node.children)[0]]
       node.key += gChild.key; //node key update
-      console.log("Node key after update: ", node.key)
+      //console.log("Node key after update: ", node.key)
       gChild.parent = node; //reference fix for g child and parent
       node.children = gChild.children;//node children clone
       gChild = null; //remove child from trie, has been squished into parent
@@ -150,51 +150,76 @@ function squashTrie(trieTree) {
     //if there are more than 1 child, check to see if they have chains, for each chain squish
     // for each end
     if (len > 1) {
-      console.log("len was greater than 1! New node ")
-      
+      //console.log("len was greater than 1! New node ")
+
       //recursion on node after key pop
       squashTrie(node)
     }
   }
 }
 
-function readAndAdd(squishedTrie, obj, refList){
+//see third answer on: https://stackoverflow.com/questions/18936915/dynamically-set-property-of-nested-object [[accessed 27/01/2021]]
+//path is list of key names, reduce goes through path from 0 -> last ele
+//where a = prev val of .reduce func
+//  b = curr val of the 
+// level = index of arr
+function setDeep(obj, path, value, setrecursively = false) {
+  console.log("path type: ", typeof(path))
+  console.log("path object: ", path)
+  path.reduce((a, b, level) => {
+    if (setrecursively && typeof a[b] === "undefined" && level !== path.length) {
+      a[b] = {};
+      return a[b];
+    }
+
+    console.log("level: ", level)
+
+    if (level === path.length) {
+      a[b] = value;
+      return value;
+    }
+    return a[b];
+  }, obj);
+}
+
+// essentially what read and add is doing would be the following pattern on the example:
+//setDeep(myObj, ["Wheel"], "_", true) //through trie.root.children
+//setDeep(myObj, ["Wheel", "_"], ["2", "3", "4"], true) // node.children
+//setDeep(myObj, ["Wheel", "Base"], true) //through trie.root.children
+// and so on...
+function readAndAdd(squishedTrie, obj, refList) {
+
   if (doesPropExist(squishedTrie, "root")) {
     var children = squishedTrie.root.children;
+    //reset reflist as we are at the top of the tree
+    refList = [];
   } else {
     var children = squishedTrie.children;
   }
 
-
   //for each node in the children list
-  for (var x in children){
+  for (var x in children) {
     var node = children[x];
     let len = Object.keys(node.children).length;
-
-    for (var ref in refList){
-      
-    }
-
-
-    //add key as blank key for obj
-    obj[node.key.toString()] = {};
-
-    //add children and go through tree
-    //for (var y in children[x].children) {
-    //  console.log("this is y: ", children[x].children[y])
-    //  readAndAdd(children[x])
-    //}
-
-    //no children, continue
+    console.log("node: ", node);
+    console.log("len: ", len);
+    //no children, leaf node, dont push onto reflist
     if (len == 0) {
+      // add key as string into obj
+      console.log("obj: ", obj);
+      console.log("reflist: ", refList);
+      console.log("node.key: ", node.key);
+      setDeep(obj, refList, node.key, true);
       return;
     }
 
     //has children, loop
     if (len >= 1) {
-      //get ref for key insertion
-      node.key
-      readAndAdd(node)
+      refList.push(node.key) //push ref for child index
+      for (var gChild in node.children) {
+        setDeep(obj, refList, node.key, true);
+        readAndAdd(gChild, obj, refList);
+      }
     }
   }
 
@@ -221,12 +246,20 @@ testArray.forEach(e => {
 //console.log(trie.find("Wheel_"));  // [ 'Wheel_4', 'Wheel_3', 'Wheel_2' ]
 //console.log(trie.find("Stee")); // [ 'Steering Wheel' ]
 
-var myObj = {};
-squashTrie(trie)
 
+squashTrie(trie) //note that after squashing the trie the contains and find methods no longer work
+
+//console.log("Trie node: \n", trie)
 //console.log("trieNode after recursion: ", trie.root.children["W"])
 //console.log(trie.root.children["S"])
 
-readAndAdd(trie, myObj)
+var myObj = {};
+var refList = [];
+//readAndAdd(trie, myObj, refList)
+setDeep(myObj, ["Wheel"], "_", true); //through trie.root.children
+setDeep(myObj, ["Wheel", "_"], ["2"], true); // node.children
+//setDeep(myObj, ["Wheel", "_"], ["2", "3", "4"], true) // node.children
+//setDeep(myObj, ["Wheel", "Base"], true) //through trie.root.children
 
-console.log("My obj after inserting vals from grouped trie", myObj)
+
+console.log("My obj after inserting vals from grouped trie: \n", myObj)

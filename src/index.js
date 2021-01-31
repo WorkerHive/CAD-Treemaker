@@ -1,6 +1,6 @@
 // trie node and setup from https://gist.github.com/tpae/72e1c54471e88b689f85ad2b3940a8f0 [accessed 18/01/2021]
 
-function TrieNode(key) {
+export function TrieNode(key) {
   this.key = key; //node value e.g. 'a'
   this.parent = null;
   this.children = {};
@@ -20,7 +20,7 @@ TrieNode.prototype.getWord = function () {
   return output.join('');
 };
 
-function Trie() {
+export function Trie() {
   this.root = new TrieNode(null);
 }
 
@@ -96,7 +96,7 @@ Trie.prototype.find = function (prefix) {
 };
 
 // recursive function to find all words in the given node.
-function findAllWords(node, arr) {
+export function findAllWords(node, arr) {
   // base case, if node is at a word, push to output
   if (node.end) {
     arr.unshift(node.getWord());
@@ -108,7 +108,7 @@ function findAllWords(node, arr) {
   }
 }
 
-function doesPropExist(node, property) {
+export function doesPropExist(node, property) {
   if (node[property] === undefined || node[property] === null) {
     return false;
   } else {
@@ -117,7 +117,7 @@ function doesPropExist(node, property) {
 }
 
 //squash all chars into char groups based on number of children 
-function squashTrie(trieTree) {
+export function squashTrie(trieTree) {
   if (doesPropExist(trieTree, "root")) {
     var children = trieTree.root.children;
   } else {
@@ -163,7 +163,7 @@ function squashTrie(trieTree) {
 //where a = prev val of .reduce func
 //  b = curr val of the 
 // level = index of arr
-function setDeep(obj, path, value, setrecursively = false) {
+export function setDeep(obj, path, value, setrecursively = false) {
   path.reduce((a, b, level) => {
     if (setrecursively && typeof a[b] === "undefined" && level !== path.length) {
       a[b] = {};
@@ -178,7 +178,7 @@ function setDeep(obj, path, value, setrecursively = false) {
   }, obj);
 }
 
-function readAndAdd(squishedTrie, obj, refList) {
+export function readAndAdd(squishedTrie, obj, refList) {
   if (doesPropExist(squishedTrie, "root")) {
     var children = squishedTrie.root.children;
   } else {
@@ -194,12 +194,11 @@ function readAndAdd(squishedTrie, obj, refList) {
     let len = Object.keys(node.children).length;
 
     console.log("\nnode key: ", node.key);
-    console.log("len: ", len);
+    console.log("children: ", len);
     //no children, leaf node, dont push onto reflist
     if (len == 0) {
       // add key as string into obj
       console.log("reflist: ", refList);
-      console.log("node.key: ", node.key);
       refList.push(node.key)
       setDeep(obj, refList, "", true);
       refList.pop(node.key)
@@ -224,17 +223,6 @@ function readAndAdd(squishedTrie, obj, refList) {
 
 }
 
-// instantiate our trie
-var trie = new Trie();
-
-//out test data
-const testArray = ["Wheel_2", "Wheel_3", "Wheel_4", "Steering Wheel", "WheelBase"];
-
-// insert test data values
-testArray.forEach(e => {
-  trie.insert(e)
-})
-
 // check contains method
 //console.log(trie.contains("helium"));  // false
 //console.log(trie.contains("kickass")); // false
@@ -245,15 +233,6 @@ testArray.forEach(e => {
 //console.log(trie.find("Wheel_"));  // [ 'Wheel_4', 'Wheel_3', 'Wheel_2' ]
 //console.log(trie.find("Stee")); // [ 'Steering Wheel' ]
 
-
-squashTrie(trie) //note that after squashing the trie the contains and find methods no longer work
-
 //console.log("Trie node: \n", trie)
 //console.log("trieNode after recursion: ", trie.root.children["W"])
 //console.log(trie.root.children["S"])
-
-var myObj = {};
-var refList = [];
-readAndAdd(trie, myObj, refList)
-
-console.log("\nMy obj after inserting vals from grouped trie: \n", myObj)
